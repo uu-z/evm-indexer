@@ -162,7 +162,7 @@ impl DatabaseTransaction {
         let effective_transaction_fee = receipt
             .gas_used
             .unwrap()
-            .mul(receipt.effective_gas_price.unwrap());
+            .mul(receipt.effective_gas_price.unwrap_or_default());
 
         let status = match receipt.status {
             Some(status) => {

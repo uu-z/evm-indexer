@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  evm-indexer:
+    # image: ghcr.io/kindynosmx/evm-indexer:main
+    build: .
+    env_file:
+      - ./.env
+    restart: on-failure
+    # network_mode: host
+    depends_on:
+      - click_server
+    command: evm-indexer --chain 4689 --rpcs ${RPC_URLS} --database http://admin:password@click_server/indexer --ws ${WS_URL} --new-blocks-only
+  #  --start-block ${START_BLOCK} --end-block ${END_BLOCK} --batch-size 500
+
+  click_server:
+    image: yandex/clickhouse-server
+    environment:
+      CLICKHOUSE_DB: indexer
+      CLICKHOUSE_USER: admin
+      CLICKHOUSE_PASSWORD: password
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./db:/var/lib/clickhouse

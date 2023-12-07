@@ -583,8 +583,13 @@ impl Rpc {
                         sleep(Duration::from_secs(4)).await;
                     }
 
+                    if rpc.chain.id == 4689 {
+                        sleep(Duration::from_secs(4)).await;
+                    }
+
                     let block_data =
                         rpc.fetch_block(&block_number, &rpc.chain).await;
+                    // info!("block data fetched {:?}.", &block_data.clone());
 
                     if let Some((
                         blocks,
@@ -611,6 +616,8 @@ impl Rpc {
                             erc1155_transfers,
                             dex_trades,
                         };
+
+                        // info!("done.",);
 
                         db.store_data(&fetched_data).await;
                     }

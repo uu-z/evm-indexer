@@ -129,7 +129,27 @@ fn calculate_bsc_block_reward(
     )
 }
 
-pub static CHAINS: [Chain; 3] = [ETHEREUM, POLYGON, BSC];
+pub const IOTEX: Chain = Chain {
+    genesis_hash: "0x230ba8095d5a505e355652f9dcc2b13605419a8fa3d3fd5ddc6d24fd6a902641",
+    genesis_timestamp: 1555869990,
+    id: 4689,
+    name: "iotex",
+    supports_blocks_receipts: false,
+    supports_trace_block: false,
+    has_miner_rewards: true,
+};
+
+fn calculate_iotex_block_reward(
+    receipts: Option<&HashMap<String, TransactionReceipt>>,
+) -> (U256, U256, U256) {
+    (
+        U256::from_dec_str("0").unwrap(),
+        get_total_fees(receipts),
+        U256::from_dec_str("0").unwrap(),
+    )
+}
+
+pub static CHAINS: [Chain; 4] = [ETHEREUM, POLYGON, BSC, IOTEX];
 
 pub fn get_chains() -> HashMap<u64, Chain> {
     let mut chains: HashMap<u64, Chain> = HashMap::new();
@@ -159,7 +179,7 @@ fn get_total_fees(
             let reward = receipt
                 .gas_used
                 .unwrap()
-                .mul(receipt.effective_gas_price.unwrap());
+                .mul(receipt.effective_gas_price.unwrap_or_default());
 
             fees_reward.add_assign(reward);
         }
@@ -186,6 +206,7 @@ pub fn get_block_reward(
         ),
         56 => calculate_bsc_block_reward(receipts),
         137 => calculate_polygon_block_reward(receipts),
+        4689 => calculate_iotex_block_reward(receipts),
         _ => panic!("invalid chain"),
     }
 }

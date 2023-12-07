@@ -77,7 +77,7 @@ impl DatabaseBlock {
             ),
             miner: format_address(block.author.unwrap()),
             mix_hash: block.mix_hash.map(format_hash),
-            nonce: format_nonce(block.nonce.unwrap()),
+            nonce: format_nonce(block.nonce.unwrap_or_default()),
             number: block.number.unwrap().as_usize() as u32,
             parent_hash: format_hash(block.parent_hash),
             receipts_root: format_hash(block.receipts_root),

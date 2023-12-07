@@ -103,7 +103,7 @@ impl Config {
         Self {
             batch_size: args.batch_size,
             chain,
-            db_host: format!("{}://{}", url.scheme(), db_host),
+            db_host: format!("{}://{}:8123", url.scheme(), db_host),
             db_name: db_name.to_string(),
             db_password: password.to_string(),
             db_username: username.to_string(),

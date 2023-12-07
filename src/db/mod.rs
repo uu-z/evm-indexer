@@ -90,6 +90,11 @@ impl Database {
             .pool_idle_timeout(POOL_IDLE_TIMEOUT)
             .build::<_, hyper::Body>(https);
 
+        info!(
+            "Connecting to ClickHouse database {} {} {} {}",
+            db_host, db_username, db_password, db_name
+        );
+
         let db = Client::with_http_client(client)
             .with_url(db_host)
             .with_user(db_username)
